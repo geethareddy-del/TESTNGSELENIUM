@@ -5,14 +5,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import BaseTest.BaseTest;
-import PageObjects.ArrayPage;
+import PageObjects.GraphPage;
 import PageObjects.HomePage;
 import PageObjects.IntroductionPage;
 
 public class GraphHomePage extends BaseTest{
 
-public HomePage hp = new HomePage();
-	public ArrayPage ap = new ArrayPage();
+	public HomePage hp = new HomePage();
+	public GraphPage gp = new GraphPage();
 	public IntroductionPage ip =  new IntroductionPage();
 
 	@BeforeMethod(alwaysRun = true)
@@ -20,73 +20,104 @@ public HomePage hp = new HomePage();
 		hp.openUrl();
 		hp.clickOnHomePageGetStartedButton();
 		ip.completeTheLOgin();
-		ip.clickOnGetStartedButtonOfArray();
+		ip.clickOnGetStartedButtonOfGraph();
 	}
-	
+
 	@AfterMethod(alwaysRun =  true) 
 	public void clearCookies(){
 		hp.deleteAllCookies();		
 	}
 
-  Scenario: Validate user navigated to graph details page when clicked on get started
-    Then The user is on the graph details page
+	@Test
+	public void Validate_user_navigated_to_graph_details_page_when_clicked_on_get_started () {
+		gp.validateUserIsOnGraphDetailPage();
+	}
 
-  Scenario: Validate user can navigate to Graph in Graph page
-    Given The user is on the graph details page
-    When The user click on graph link in graph details page
-    Then the user is navigated to graph page under graph details
+	@Test
+	public void Validate_user_can_navigate_to_Graph_in_Graph_page () {
+		gp.validateUserIsOnGraphDetailPage();
+		gp.clickOnGraphLinkUnderGraphDetails();
+		gp.validateUserIsOnGraphsUnderGraphDetails();
+	}
 
-  Scenario: Validate user can Try here link page from graphs
-    Given The user is on the graphs page under graph detials
-    When User clicks Try here link
-    Then User should navigate to tryEditor page
+	@Test
+	public void Validate_user_can_Try_here_link_page_from_graphs () {
+		gp.clickOnGraphLinkUnderGraphDetails();
+		gp.validateUserIsOnGraphsUnderGraphDetails();
+		ip.clickOnTryHerebutton();
+		ip.codeTryEditorPage();
+	}
 
-  Scenario: Error message displayed for invalid code on try Editor for graphs page
-    Given The user is on the graphs page under graph detials
-    And User clicks Try here link
-    When The user write the invalid code in Editor
-    And Click the Run button
-    Then The user should able to see an error message in alert window
+	@Test
+	public void Error_message_displayed_for_invalid_code_on_try_Editor_for_graphs_page () {
+		gp.clickOnGraphLinkUnderGraphDetails();
+		gp.validateUserIsOnGraphsUnderGraphDetails();
+		ip.clickOnTryHerebutton();
+		ip.enterCodeInEditor("ABC");
+		ip.clickOnRunButton();
+		ip.validateErrorMessageDisplayedOnAlert("dsportalapp.herokuapp.com says", "NameError: name 'ABC' is not defined on line 1");
+	}
 
-  Scenario: No error message displayed for empty code on try editor for graphs page
-    Given The user is on the graphs page under graph detials
-    And User clicks Try here link
-    When Click the Run button
-    Then The user should not see any error message or alert
+	@Test
+	public void No_error_message_displayed_for_empty_code_on_try_editor_for_graphs_page () {
+		gp.clickOnGraphLinkUnderGraphDetails();
+		gp.validateUserIsOnGraphsUnderGraphDetails();
+		ip.clickOnTryHerebutton();
+		ip.clickOnRunButton();
+		ip.validateNoConsoleOuput();
+	}
 
-  Scenario: Valid code on try editor for graphs runs successfully
-    Given The user is on the graphs page under graph detials
-    And User clicks Try here link
-    When The user write the valid code in Editor
-    And Click the Run button
-    Then The user should able to see output in the console
+	@Test
+	public void Valid_code_on_try_editor_for_graphs_runs_successfully () {
+		gp.clickOnGraphLinkUnderGraphDetails();
+		gp.validateUserIsOnGraphsUnderGraphDetails();
+		ip.clickOnTryHerebutton();
+		ip.enterCodeInEditor("print(\"hello\")");
+		ip.clickOnRunButton();
+		ip.validateConsoleOutput("hello");
+	}
 
-  Scenario: Validate user can navigate to Graph Representations page
-    Given The user is on the graph details page
-    When The user click on graph representations link
-    Then the user is navigated to graph representations page 
-    
-  Scenario: Validate user can click on Try here link from graph representations page
-    Given The user is on the graphs representations page
-    When User clicks Try here link
-    Then User should navigate to tryEditor page
+	@Test
+	public void Validate_user_can_navigate_to_Graph_Representations_page () {
+		gp.validateUserIsOnGraphDetailPage();
+		gp.clickonGraphRepresentations();
+	    gp.validateUserIsOnGraphRepresentations();
+	}
 
-  Scenario: Error message displayed for invalid code on try Editor for graph representations page
-    Given The user is on the graphs representations page
-    And User clicks Try here link
-    When The user write the invalid code in Editor
-    And Click the Run button
-    Then The user should able to see an error message in alert window
+	@Test
+	public void Validate_user_can_click_on_Try_here_link_from_graph_representations_page () {
+		gp.clickonGraphRepresentations();
+	    gp.validateUserIsOnGraphRepresentations();
+	    ip.clickOnTryHerebutton();
+		ip.codeTryEditorPage();
+	}
 
-  Scenario: No error message displayed for empty code on try editor for graph representations page
-    Given The user is on the graphs representations page
-    And User clicks Try here link
-    When Click the Run button
-    Then The user should not see any error message or alert
+	@Test
+	public void Error_message_displayed_for_invalid_code_on_try_Editor_for_graph_representations_page  () {
+		gp.clickonGraphRepresentations();
+		gp.validateUserIsOnGraphRepresentations();
+		ip.clickOnTryHerebutton();
+		ip.enterCodeInEditor("ABC");
+		ip.clickOnRunButton();
+		ip.validateErrorMessageDisplayedOnAlert("dsportalapp.herokuapp.com says", "NameError: name 'ABC' is not defined on line 1");
+	}
 
-  Scenario: Valid code on try editor for graph representations runs successfully
-    Given The user is on the graphs representations page
-    And User clicks Try here link
-    When The user write the valid code in Editor
-    And Click the Run button
-    Then The user should able to see output in the console
+	@Test
+	public void No_error_message_displayed_for_empty_code_on_try_editor_for_graph_representations_page  () {
+		gp.clickonGraphRepresentations();
+		gp.validateUserIsOnGraphRepresentations();
+		ip.clickOnTryHerebutton();
+		ip.clickOnRunButton();
+		ip.validateNoConsoleOuput();
+	}
+
+	@Test
+	public void Valid_code_on_try_editor_for_graph_representations_runs_successfully  () {
+		gp.clickonGraphRepresentations();
+		gp.validateUserIsOnGraphRepresentations();
+		ip.clickOnTryHerebutton();
+		ip.enterCodeInEditor("print(\"hello\")");
+		ip.clickOnRunButton();
+		ip.validateConsoleOutput("hello");
+	}
+}
